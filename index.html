@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Chat with people in Apple Stores</title>
+<script src="stores.js"></script>
+<script src="applestores.js"></script>
+<style type="text/css">
+body {
+	font: 14px "lucida grande", tahoma, verdana, arial, sans-serif;
+	color: #014;
+}
+#ichat-pic {
+	float: right;
+	margin: -.4em 1.5em 0 .5em;
+}
+#store-pic {
+	float: left;
+	margin: .2em 1.5em 0 .5em;
+}
+#heading {
+	display: inline-block;
+	text-align: left;
+}
+h1 {
+	color: #027;
+}
+#instructions {
+	color: #667;
+	font-size: .9em;
+}
+ul {
+	list-style-type: none;
+	margin: 1em 0 0;
+	padding: 0;
+	line-height: 0;
+}
+li {
+	display: inline-block;
+	border: 1px solid black;
+	padding: 3px;
+	margin: -1px -1px 0 0;
+	text-align: center;
+}
+li.online {
+	background-color: #0f0;
+}
+li img {
+	display: block;
+	margin: auto;
+	opacity: .5;
+}
+li.online img {
+	opacity: 1;
+}
+</style>
+</head>
+<body>
+	<img id="store-pic" src="store.png" alt="">
+	<!--<img id="ichat-pic" src="ichat.png" alt="">-->
+	<h1>Chat with people in Apple Stores</h1>
+	<form id="form" action="">
+		<p>
+			<select id="stores"></select>
+			<select id="protocol">
+				<option value="aim">AIM</option>
+				<option value="ichat" selected="selected">iChat</option>
+			</select>
+			<input type="submit" value="Go">
+		</p>
+	</form>
+	<p id="instructions">Select a store and press Go. The green boxes represent online accounts. Click one to start a chat.</p>
+	<div id="fb-root"></div><script src="http://connect.facebook.net/en_US/all.js#appId=220145644680916&amp;xfbml=1"></script><fb:like href="http://www.lehnerstudios.com/stuff/applestorechat/" send="false" width="450" show_faces="false" font="lucida grande"></fb:like>
+	<ul id="accounts"></ul>
+	<script>init();</script>
+</body>
+</html>
