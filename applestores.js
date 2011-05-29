@@ -37,7 +37,7 @@ function init() {
 
 // manual entry of store number in menu.
 function askForOther() {
-	var id = prompt('Enter a store number.');
+	var id = prompt('Enter a 3-digit store number.');
 	if (!id) return;
 	addOption(storesMenu, id, id).selected = true;
 }
@@ -64,12 +64,32 @@ function addOption(menu, value, text) {
 	return option;
 }
 
+function addOptgroup(menu, label) {
+	var optgroup = document.createElement("optgroup");
+	optgroup.setAttribute("label", label);
+	menu.appendChild(optgroup);
+	return optgroup;
+}
+
 function populateStoresMenu(stores) {
+	// group stores by country
+	var storesByCountry = {};
 	stores.forEach(function (store) {
-		if (!store.name) return;
-		var option = addOption(storesMenu, store.id, '[' + store.id + '] - ' + store.name);
-		if (store.id == '095') option.selected = true;
+		(storesByCountry[store.country] || (storesByCountry[store.country] = [])).push(store);
 	});
+	
+	for (var country in storesByCountry) {
+		var optgroup = addOptgroup(storesMenu, country);
+		var stores = storesByCountry[country];
+		stores.forEach(function (store) {
+			if (!store.name) return;
+			var id = store.id.substr(1);
+			//var name = store.city + (store.state ? ', ' + store.state:'') + ' - ' + store.name;
+			var name = (store.state ? store.state + ' - ':'') + store.city + ' - ' + store.name;
+			var option = addOption(optgroup, id, name);
+			if (id == '095') option.selected = true;
+		});
+	}
 	addOption(storesMenu, "other", "Other&hellip;");
 }
 

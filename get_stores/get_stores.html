@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+<head>
+<title>Get Stores List</title>
+</head>
+<body>
+<code id="result"></code>
+<script src="htmlentities.js"></script>
+<script type="text/javascript">
+var xhr = new XMLHttpRequest();
+xhr.open("GET","stores_proxy.xml.php",false);
+xhr.send();
+var doc = xhr.responseXML;
+
+var stores = [];
+function getValue(node, name) {
+	return htmlentities(node.getElementsByTagName(name)[0].firstChild.nodeValue);
+}
+function addStoreFromXML(storeNode, country, state) {
+	stores.push({
+		id: getValue(storeNode, "appleid"),
+		name: getValue(storeNode, "name"),
+		city: getValue(storeNode, "city"),
+		state: state,
+		country: country
+	});
+}
+
+function a(nodeList) {
+	return Array.prototype.slice.call(nodeList); 
+}
+
+var rewriteCountries = {
+	"Canada - French": null,
+	"Switzerland - German": null,
+	"Canada - English": "Canada",
+	"Switzerland - French": "Switzerland"
+};
+
+a(doc.getElementsByTagName("country")).forEach(function (country) {
+	var stateName, countryName = country.getAttribute("name");
+	
+	if (countryName in rewriteCountries) {
+		countryName = rewriteCountries[countryName];
+		if (!countryName) return;
+	}
+		
+	function addStore(store) {
+		addStoreFromXML(store, countryName, stateName);
+	}
+	var states = a(country.getElementsByTagName("state"));
+	if (states.length) {
+		states.forEach(function (state) {
+			stateName = state.getAttribute("name");
+			a(state.getElementsByTagName("store")).forEach(addStore);
+		});
+	} else {
+		a(country.getElementsByTagName("store")).forEach(addStore);
+	}
+});
+var text = 'var stores = ' + JSON.stringify(stores) + ';';
+document.getElementById("result").appendChild(document.createTextNode(text));
+</script>
+</body>
+</html>
