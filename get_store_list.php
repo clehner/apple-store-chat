@@ -3,7 +3,7 @@ $html = file_get_contents('http://www.ifoapplestore.com/stores/job_store_list.ht
 if (!$html) {
 	die('Unable to get store list.');
 }
-if (!preg_match_all('/<li.*?R([0-9]{3}) - (.*?)\s*</s', $html, $m)) {
+if (!preg_match_all('/<li.*?R([0-9]{3}) - ([^<]*)/', $html, $m)) {
 	die('Unable to get <li>s in store list');
 }
 $names = array();
@@ -18,6 +18,9 @@ foreach($m[2] as $i => $name) {
 		), $name));
 	}
 }
+
+//print_r($names);
+//exit;
 
 $stores = array();
 foreach($names as $id => $name) {
