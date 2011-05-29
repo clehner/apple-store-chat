@@ -44,4 +44,7 @@ li img {
 }
 li.online img {
 	opacity: 1;
+	min-width: 48px;
+	min-height: 48px;
+	border-style: none;
 }
