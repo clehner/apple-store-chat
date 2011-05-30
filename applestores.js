@@ -122,13 +122,24 @@ function jsonp(url, cb) {
 
 function Account(store, account) {
 	this.sn = 'ars' + store + '.' + padNumber(account, 2) + '@mac.com';
+	
 	this.li = document.createElement("li");
-	this.a = document.createElement("a");
-	this.icon = document.createElement("img");
-	this.a.appendChild(this.icon);
-	//this.a.appendChild(document.createTextNode(this.sn));
 	this.li.title = this.sn;
+	this.li.style.display = "none";
+	
+	this.a = document.createElement("a");
 	this.li.appendChild(this.a);
+	
+	this.icon = document.createElement("img");
+	var self = this;
+	jsonp('http://api.oscar.aol.com/expressions/get?f=json&type=buddyIcon&t=' + this.sn + '&c=', function (result) {
+		self.icon.src = result.response.data.expressions[0].url;
+	});
+	this.icon.onload = function (e) {
+		self.a.appendChild(self.icon);
+		self.li.style.display = "";
+	};
+	
 	this.getPresence();
 }
 Account.prototype = {
@@ -144,11 +155,11 @@ Account.prototype = {
 		});
 	},
 	gotPresence: function (presence) {
-		this.online = (presence.state == 'online');
-		var icon = presence.buddyIcon;
-		this.li.className = this.online ? 'online' : '';
-		if (icon) this.icon.src = icon;
+		this.online = (presence.state != 'offline');
+		this.li.className = presence.state;
+		if (this.online) this.li.style.display = "";
 		this.updateLink();
+		this.li.title = this.sn + ' (' + presence.state + ')';
 	},
 	updateLink: function () {
 		if (this.online) this.a.setAttribute('href', makeChatLink(this.sn));
