@@ -34,17 +34,33 @@ li {
 	margin: -1px -1px 0 0;
 	text-align: center;
 }
+li.offline {
+	background-color: #fff;
+}
 li.online {
 	background-color: #0f0;
+	border-color: #0c0;
+	position: relative;
+}
+li.away {
+	background-color: #f74;
+}
+li.idle {
+	background-color: #ff0;
+}
+li.mobile {
+	background-color: #0ff;
+}
+
+li a {
+	display: block;
+	min-width: 48px;
+	min-height: 48px;
 }
 li img {
 	display: block;
 	margin: auto;
-	opacity: .5;
 }
-li.online img {
-	opacity: 1;
-	min-width: 48px;
-	min-height: 48px;
-	border-style: none;
+li.offline img {
+	opacity: .5;
 }
